@@ -13,7 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
-    static $password = 'test';
+    static $password = '';
 
     return [
         'name' => $faker->name,

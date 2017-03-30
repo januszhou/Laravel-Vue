@@ -19,7 +19,8 @@ class CreateUserQuestionAnswerTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('question_id')->unsigned();
             $table->integer('answer_id')->unsigned();
-
+            $table->softDeletes();
+            
             $table->index(['user_id', 'question_id', 'answer_id']);
         });
     }

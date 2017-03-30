@@ -16,8 +16,9 @@ class CreateAnswerTable extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->softDeletes();
+            $table->string('title')->unique();
             $table->integer('question_id');
-            $table->string('title');
         });
     }
 

@@ -13,12 +13,39 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
-    static $password;
+    static $password = 'test';
 
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->state(\App\Models\User::class, 'admin', function (\Faker\Generator $faker) {
+    return [
+        'is_admin' => 1,
+    ];
+});
+
+$factory->define(App\Models\Question::class, function (Faker\Generator $faker) {
+    return [
+        'title' => null,
+        'is_multiple' => false
+    ];
+});
+
+$factory->define(App\Models\Answer::class, function (Faker\Generator $faker) {
+    return [
+        'title' => null
+    ];
+});
+
+$factory->define(App\Models\UserAnswer::class, function (Faker\Generator $faker) {
+    return [
+        'user_id' => null,
+        'answer_id' => null,
+        'question_id' => null
     ];
 });

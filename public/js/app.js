@@ -12385,7 +12385,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            email: null,
+            password: null
+        };
+    },
+
+    methods: {
+        onSubmit: function onSubmit(event) {
+            alert(this.email + ':' + this.password);
+            this.$router.push({ path: '/' });
+        }
+    }
+});
 
 /***/ }),
 /* 38 */
@@ -32047,8 +32061,6 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row"
   }, [_c('div', {
@@ -32065,6 +32077,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "role": "form",
       "method": "POST",
       "action": ""
+    },
+    on: {
+      "submit": _vm.onSubmit
     }
   }, [_c('div', {
     staticClass: "form-group"
@@ -32076,6 +32091,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Email")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.email),
+      expression: "email"
+    }],
     staticClass: "form-control",
     attrs: {
       "id": "email",
@@ -32084,6 +32105,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "value": "",
       "required": "",
       "autofocus": ""
+    },
+    domProps: {
+      "value": (_vm.email)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.email = $event.target.value
+      }
     }
   })])]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
@@ -32095,14 +32125,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Password")]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.password),
+      expression: "password"
+    }],
     staticClass: "form-control",
     attrs: {
       "id": "password",
       "type": "password",
       "name": "password",
       "required": ""
+    },
+    domProps: {
+      "value": (_vm.password)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.password = $event.target.value
+      }
     }
-  })])]), _vm._v(" "), _c('div', {
+  })])]), _vm._v(" "), _vm._m(0)])])])])])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "form-group"
   }, [_c('div', {
     staticClass: "col-md-8 col-md-offset-4"
@@ -32111,7 +32158,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "submit"
     }
-  }, [_vm._v("\n                                Login\n                            ")])])])])])])])])
+  }, [_vm._v("\n                                Login\n                            ")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

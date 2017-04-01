@@ -17,6 +17,4 @@ Route::get('/', function () {
 
 Route::get('/{sub}', function () {
     return view('app');
-})->where('sub', '.*');
-
-Auth::routes();
+})->where('sub', '^(?!api).*'); // ignore all GET requests start from 'api'

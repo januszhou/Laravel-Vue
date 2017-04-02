@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/v1/login', 'LoginController@login');
+Route::post('/v1/login', 'AuthController@login');
+Route::post('/v1/register', 'AuthController@register');
 
 Route::group(['middleware' => ['myapi'], 'prefix' => 'v1'], function () {
 

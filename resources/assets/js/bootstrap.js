@@ -21,6 +21,7 @@ window.Vue = require('vue');
 
 window.VueRouter = require('vue-router');
 
+window.VueCookie = require('vue-cookie');
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -31,7 +32,8 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common = {
     'X-CSRF-TOKEN': window.Laravel.csrfToken,
-    'X-Requested-With': 'XMLHttpRequest'
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization': window.VueCookie.get('authorization') // set auth
 };
 
 /**

@@ -4,7 +4,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="" v-on:submit="onSubmit">
+                    <form class="form-horizontal" role="form" method="POST" action="" v-on:submit.prevent="onSubmit">
                         <div class="form-group">
                             <label for="email" class="col-md-4 control-label">Email</label>
 
@@ -45,8 +45,18 @@
         },
         methods:{
             onSubmit(event){
-                alert(this.email + ':' + this.password);
-                this.$router.push({ path: '/' })
+                axios.post('/api/v1/login', {
+                    email: this.email,
+                    password: this.password
+                })
+                .then((response) => {
+                    console.log(response);
+                    this.$cookie.set('authorization', response.data.token, { expires: '1M' });
+//                    this.$router.push({ path: '/' })
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
             }
         }
     }

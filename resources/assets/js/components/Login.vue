@@ -5,6 +5,13 @@
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="" v-on:submit.prevent="onSubmit">
+
+                        <div v-if="error" class="form-group has-error">
+                            <span class="help-block text-center">
+                                <strong>{{error}}</strong>
+                            </span>
+                        </div>
+
                         <div class="form-group">
                             <label for="email" class="col-md-4 control-label">Email</label>
 
@@ -40,7 +47,8 @@
         data(){
             return {
                 email: null,
-                password: null
+                password: null,
+                error: null
             }
         },
         methods:{
@@ -52,10 +60,14 @@
                 .then((response) => {
                     console.log(response);
                     this.$cookie.set('authorization', response.data.token, { expires: '1M' });
-//                    this.$router.push({ path: '/' })
+                    this.$router.push({ path: '/' });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
+                    this.error = error.response.data.detail;
+                    setTimeout(() => {
+                        this.error = null;
+                    }, 200);
                 });
             }
         }

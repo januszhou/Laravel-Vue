@@ -4,13 +4,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="">
+                    <form class="form-horizontal" role="form" method="POST" action="" v-on:submit.prevent="onSubmit">
+
+                        <div v-if="error" class="form-group has-error">
+                            <span class="help-block text-center">
+                                <strong>{{error}}</strong>
+                            </span>
+                        </div>
 
                         <div class="form-group">
                             <label for="first-name" class="col-md-4 control-label">First Name</label>
 
                             <div class="col-md-6">
-                                <input id="first-name" type="text" class="form-control" name="first_name" value="" required autofocus>
+                                <input id="first-name" type="text" class="form-control" name="first_name" value="" required autofocus v-model="firstName">
                             </div>
                         </div>
 
@@ -18,7 +24,7 @@
                             <label for="last-name" class="col-md-4 control-label">Last Name</label>
 
                             <div class="col-md-6">
-                                <input id="last-name" type="text" class="form-control" name="last_name" value="" required autofocus>
+                                <input id="last-name" type="text" class="form-control" name="last_name" value="" required v-model="lastName">
                             </div>
                         </div>
 
@@ -26,7 +32,7 @@
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="" required>
+                                <input id="email" type="email" class="form-control" name="email" value="" required v-model="email">
                             </div>
                         </div>
 
@@ -34,7 +40,7 @@
                             <label for="password" class="col-md-4 control-label">Password</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                <input id="password" type="password" class="form-control" name="password" required v-model="password">
                             </div>
                         </div>
 
@@ -42,7 +48,7 @@
                             <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required v-model="passwordConfirmation">
                             </div>
                         </div>
 
@@ -62,6 +68,35 @@
 
 <script>
     export default {
-
+        data(){
+            return {
+                firstName: null,
+                lastName: null,
+                email: null,
+                password: null,
+                passwordConfirmation: null,
+                error: null
+            }
+        },
+        methods:{
+            onSubmit(event){
+                axios.post('/api/v1/register', {
+                    email: this.email,
+                    password: this.password,
+                    first_name: this.firstName,
+                    last_name: this.lastName,
+                    password_confirmation: this.passwordConfirmation
+                })
+                .then((response) => {
+                    console.log(response);
+                    this.$cookie.set('authorization', response.data.token, { expires: '1M' });
+                    this.$router.push({ path: '/' });
+                })
+                .catch((error) => {
+                        console.log(error.response.data);
+                    this.error = error.response.data.detail;
+                });
+            }
+        }
     }
 </script>

@@ -1,16 +1,34 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="center-block">
-
+            <div class="center-block has-error text-center" v-if="!user">
+                <strong>You have to login to answer questions</strong>
             </div>
-            <button class="btn btn-success btn-lg center-block">Get Start</button>
+            <button v-if="user" class="btn btn-success btn-lg center-block" v-on:click="getQuestions">Get Start</button>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-
+      data(){
+          return {
+              questions: null,
+              start: false,
+              user: this.$store.getters.user,
+              error: null
+          }
+      },
+      methods:{
+          getQuestions(event){
+              axios.get('/api/v1/questions')
+              .then((response) => {
+                  console.log(response);
+              })
+              .catch((error) => {
+                  this.error = error.response.data.detail;
+              });
+          }
+      }
     }
 </script>

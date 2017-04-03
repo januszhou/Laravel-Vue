@@ -10,6 +10,9 @@ require('./bootstrap');
 Vue.use(VueRouter);
 Vue.use(VueCookie);
 
+const VueStore = require('vuex');
+Vue.use(VueStore);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -32,4 +35,26 @@ const routes = [
 
 const router = new VueRouter({ mode: 'history', routes: routes});
 
-const app = new Vue({ router: router }).$mount('#app');
+const store = new VueStore.Store({
+  state: {
+    user: null
+  },
+  getters: {
+    name: state => {
+      return state.user?state.user.first_name + ' ' + state.user.last_name:null;
+    },
+    user: state => {
+      return state.user
+    }
+  },
+  mutations: {
+    setUser(state, user){
+      state.user = user;
+    }
+  }
+})
+
+const app = new Vue({
+  router: router,
+  store: store
+}).$mount('#app');

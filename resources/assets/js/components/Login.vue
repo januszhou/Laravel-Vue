@@ -59,6 +59,7 @@
                 })
                 .then((response) => {
                     console.log(response);
+                    this.$store.commit('setUser', response.data);
                     this.$cookie.set('authorization', response.data.token, { expires: '1M' });
                     this.$router.push({ path: '/' });
                 })
@@ -67,7 +68,7 @@
                     this.error = error.response.data.detail;
                     setTimeout(() => {
                         this.error = null;
-                    }, 200);
+                    }, 2000);
                 });
             }
         }

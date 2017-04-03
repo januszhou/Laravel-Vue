@@ -18,6 +18,6 @@
     "vue-router": "^2.3.1"
   },
   "dependencies": {
-
+    "vue-cookie": "^1.1.3"
   }
 }

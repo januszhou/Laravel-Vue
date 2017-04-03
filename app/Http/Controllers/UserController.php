@@ -9,11 +9,12 @@ class UserController extends BaseController
 {
     public function __construct()
     {
-//        $this->middleware('permission');
+        // TODO: Later add permission middleware to prevent access other users profile
+        //$this->middleware('permission');
     }
 
-    public function show(User $user)
+    public function show(Request $request)
     {
-        return $user;
+        return $request->attributes->get('user');
     }
 }

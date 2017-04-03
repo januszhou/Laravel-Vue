@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 
 class Api
@@ -16,7 +17,8 @@ class Api
     public function handle($request, Closure $next)
     {
         $token = $request->header('Authorization');
-        if(!$token){
+        $user = User::where('token', $token)->first();
+        if(!$token || !$user){
             $errors = [
                 'status' => 401,
                 'title' => 'Unauthorized',
@@ -24,6 +26,7 @@ class Api
             ];
             return response()->json($errors, 401);
         } else {
+            $request->attributes->add(['user' => $user]);
             return $next($request);
         }
 

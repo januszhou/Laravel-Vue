@@ -21,9 +21,9 @@ class Question extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'is_multiple'];
+    protected $fillable = ['title', 'is_multiple'];
 
-    protected $appends = ['title'];
+    protected $appends = ['answers'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -45,5 +45,10 @@ class Question extends Model
     public function answers()
     {
         return $this->hasMany('App\Models\Answer', 'question_id', 'id');
+    }
+    
+    public function getAnswersAttribute()
+    {
+        return $this->answers()->get();
     }
 }

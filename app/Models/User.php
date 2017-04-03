@@ -29,15 +29,28 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function isAdmin(){
+    protected $appends = ['question_answer'];
+
+    public function isAdmin()
+    {
         return $this->is_admin == 1;
     }
 
-    public function getNameAttribute(){
+    public function getNameAttribute()
+    {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getQuestionAnswerAttribute()
+    {
+        return $this->questionAnswer()->get();
     }
 
     /**
      * Start relationships section
      */
+    public function questionAnswer()
+    {
+        return $this->hasMany('App\Models\UserAnswer', 'user_id', 'id');
+    }
 }

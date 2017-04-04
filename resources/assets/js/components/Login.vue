@@ -60,7 +60,7 @@
                 .then((response) => {
                     console.log(response);
                     this.$store.commit('setUser', response.data);
-                    this.$cookie.set('authorization', response.data.token, { expires: '1M' });
+                    this.$cookie.set('authorization', JSON.stringify({token: response.data.token, url: response.data.href}) , { expires: '1M' });
                     this.$router.push({ path: '/' });
                 })
                 .catch((error) => {

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-md-12">
-            <div class="center-block has-error text-center" v-if="!user">
+            <div class="center-block text-danger text-center" v-if="!user">
                 <strong>You have to login to answer questions</strong>
             </div>
             <button v-if="user" class="btn btn-success btn-lg center-block" v-on:click="getQuestions">Get Start</button>

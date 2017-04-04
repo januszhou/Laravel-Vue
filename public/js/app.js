@@ -11455,9 +11455,31 @@ var store = new VueStore.Store({
   }
 });
 
+var auth = VueCookie.get('authorization');
+
+try {
+  auth = JSON.parse(auth);
+} catch (e) {
+  VueCookie.delete('authorization');
+  auth = null;
+}
+
+axios.defaults.headers.common['Authorization'] = auth ? auth.token : null; // set auth token
+
 var app = new Vue({
   router: router,
-  store: store
+  store: store,
+  created: function created() {
+    if (auth) {
+      axios.get(auth.url).then(function (response) {
+        console.log(response);
+        store.commit('setUser', response.data);
+        router.push({ path: '/' });
+      }).catch(function (error) {
+        router.push({ path: '/login' });
+      });
+    }
+  }
 }).$mount('#app');
 
 /***/ }),
@@ -12458,8 +12480,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 console.log(response);
                 _this.$store.commit('setUser', response.data);
-                console.log(_this.$store.getters.user);
-                _this.$cookie.set('authorization', response.data.token, { expires: '1M' });
+                _this.$cookie.set('authorization', JSON.stringify({ token: response.data.token, url: response.data.href }), { expires: '1M' });
                 _this.$router.push({ path: '/' });
             }).catch(function (error) {
                 console.log(error.response.data);
@@ -12590,7 +12611,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 password_confirmation: this.passwordConfirmation
             }).then(function (response) {
                 console.log(response);
-                _this.$cookie.set('authorization', response.data.token, { expires: '1M' });
+                _this.$cookie.set('authorization', { token: response.data.token, url: response.data.href }, { expires: '1M' });
                 _this.$router.push({ path: '/' });
             }).catch(function (error) {
                 console.log(error.response.data);
@@ -12640,8 +12661,7 @@ window.axios = __webpack_require__(17);
 
 window.axios.defaults.headers.common = {
   'X-CSRF-TOKEN': window.Laravel.csrfToken,
-  'X-Requested-With': 'XMLHttpRequest',
-  'Authorization': window.VueCookie.get('authorization') // set auth
+  'X-Requested-With': 'XMLHttpRequest'
 };
 
 /**
@@ -32529,7 +32549,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [(!_vm.user) ? _c('div', {
-    staticClass: "center-block has-error text-center"
+    staticClass: "center-block text-danger text-center"
   }, [_c('strong', [_vm._v("You have to login to answer questions")])]) : _vm._e(), _vm._v(" "), (_vm.user) ? _c('button', {
     staticClass: "btn btn-success btn-lg center-block",
     on: {

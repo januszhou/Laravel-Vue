@@ -29,7 +29,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $appends = ['question_answer'];
+    protected $appends = ['href', 'question_answer'];
 
     public function isAdmin()
     {
@@ -44,6 +44,11 @@ class User extends Authenticatable
     public function getQuestionAnswerAttribute()
     {
         return $this->questionAnswer()->get();
+    }
+
+    public function getHrefAttribute()
+    {
+        return env('APP_URL')."/api/v1/users/{$this->id}";
     }
 
     /**

@@ -89,7 +89,7 @@
                 })
                 .then((response) => {
                     console.log(response);
-                    this.$cookie.set('authorization', response.data.token, { expires: '1M' });
+                    this.$cookie.set('authorization', {token: response.data.token, url: response.data.href} , { expires: '1M' });
                     this.$router.push({ path: '/' });
                 })
                 .catch((error) => {

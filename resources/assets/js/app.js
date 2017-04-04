@@ -52,9 +52,33 @@ const store = new VueStore.Store({
       state.user = user;
     }
   }
-})
+});
+
+let auth = VueCookie.get('authorization');
+
+try {
+  auth = JSON.parse(auth);
+} catch(e) {
+  VueCookie.delete('authorization');
+  auth = null;
+}
+
+axios.defaults.headers.common['Authorization'] = auth?auth.token:null; // set auth token
 
 const app = new Vue({
   router: router,
-  store: store
+  store: store,
+  created: () => {
+      if(auth){
+        axios.get(auth.url)
+        .then((response) => {
+            console.log(response);
+            store.commit('setUser', response.data);
+            router.push({ path: '/' });
+        })
+        .catch((error) => {
+            router.push({ path: '/login' });
+        });
+      }
+  }
 }).$mount('#app');

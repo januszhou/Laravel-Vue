@@ -11460,7 +11460,7 @@ var auth = VueCookie.get('authorization');
 try {
   auth = JSON.parse(auth);
 } catch (e) {
-  VueCookie.delete('authorization');
+  VueCookie.delete('authorization'); // delete error authorization
   auth = null;
 }
 
@@ -11474,7 +11474,6 @@ var app = new Vue({
       axios.get(auth.url).then(function (response) {
         console.log(response);
         store.commit('setUser', response.data);
-        router.push({ path: '/' });
       }).catch(function (error) {
         router.push({ path: '/login' });
       });
@@ -12362,19 +12361,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
-    }
-});
-
-/***/ }),
-/* 36 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -12389,10 +12376,89 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
+        return {};
+    },
+
+    methods: {
+        logout: function logout(event) {
+            // logout will delete authentication cookie and redirect to login page
+            this.$cookie.delete('authentication');
+            this.$router.push({ path: '/login' });
+        }
+    },
+    computed: {
+        userName: function userName() {
+            return this.$store.getters.name;
+        }
+    }
+});
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var Question = function () {
+    function Question(id, name) {
+        var multiple = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+        _classCallCheck(this, Question);
+
+        this.id = id;
+        this.name = name;
+        this.multiple = multiple;
+        this.answers = [];
+    }
+
+    _createClass(Question, [{
+        key: 'addAnswers',
+        value: function addAnswers(answer) {
+            this.answers.push(answer);
+        }
+    }]);
+
+    return Question;
+}();
+
+var Answer = function Answer(id, name) {
+    _classCallCheck(this, Answer);
+
+    this.id = id;
+    this.name = name;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
         return {
-            questions: null,
+            questions: [],
             start: false,
-            user: this.$store.getters.user,
             error: null
         };
     },
@@ -12402,10 +12468,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             axios.get('/api/v1/questions').then(function (response) {
-                console.log(response);
+                var qArray = [];
+                response.data.forEach(function (item) {
+                    var question = new Question(item.id, item.title, item.is_multiple);
+                    item.answers.forEach(function (answer) {
+                        question.addAnswers(new Answer(answer.id, answer.title));
+                    });
+                    qArray.push(question);
+                });
+
+                _this.questions = qArray;
             }).catch(function (error) {
+                console.log(error);
                 _this.error = error.response.data.detail;
             });
+        }
+    },
+    computed: {
+        user: function user() {
+            return this.$store.state.user;
         }
     }
 });
@@ -12611,7 +12692,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 password_confirmation: this.passwordConfirmation
             }).then(function (response) {
                 console.log(response);
-                _this.$cookie.set('authorization', { token: response.data.token, url: response.data.href }, { expires: '1M' });
+                _this.$cookie.set('authorization', JSON.stringify({ token: response.data.token, url: response.data.href }), { expires: '1M' });
                 _this.$router.push({ path: '/' });
             }).catch(function (error) {
                 console.log(error.response.data);
@@ -32555,7 +32636,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.getQuestions
     }
-  }, [_vm._v("Get Start")]) : _vm._e()])])
+  }, [_vm._v("Get Start")]) : _vm._e(), _vm._v(" "), _c('ol', _vm._l((_vm.questions), function(question) {
+    return _c('li', [_c('label', [_vm._v(_vm._s(question.name))]), _vm._v(" "), _c('select', {
+      staticClass: "form-control",
+      attrs: {
+        "multiple": question.multiple ? true : false
+      }
+    }, [(question.mutiple === 0) ? _c('option', {
+      attrs: {
+        "val": "0"
+      }
+    }, [_vm._v("--SELECT--")]) : _vm._e(), _vm._v(" "), _vm._l((question.answers), function(answer) {
+      return _c('option', {
+        attrs: {
+          "val": answer.id
+        }
+      }, [_vm._v(_vm._s(answer.name))])
+    })], 2)])
+  }))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -32586,7 +32684,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "app-navbar-collapse"
     }
-  }, [_c('ul', {
+  }, [(!_vm.userName) ? _c('ul', {
     staticClass: "nav navbar-nav navbar-right"
   }, [_c('li', [_c('router-link', {
     attrs: {
@@ -32596,7 +32694,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/register"
     }
-  }, [_vm._v("Register")])], 1)])])])])
+  }, [_vm._v("Register")])], 1)]) : _vm._e(), _vm._v(" "), (_vm.userName) ? _c('ul', {
+    staticClass: "nav navbar-nav navbar-right"
+  }, [(_vm.userName) ? _c('li', {
+    staticClass: "dropdown"
+  }, [_c('a', {
+    staticClass: "dropdown-toggle",
+    attrs: {
+      "href": "#",
+      "data-toggle": "dropdown",
+      "role": "button",
+      "aria-expanded": "false"
+    }
+  }, [_vm._v("\n                        " + _vm._s(_vm.userName) + " "), _c('span', {
+    staticClass: "caret"
+  })]), _vm._v(" "), _c('ul', {
+    staticClass: "dropdown-menu",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.logout($event)
+      }
+    }
+  }, [_vm._v("Logout")])])])]) : _vm._e()]) : _vm._e()])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('button', {
     staticClass: "navbar-toggle collapsed",

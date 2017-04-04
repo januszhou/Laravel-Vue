@@ -5,11 +5,11 @@
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="" v-on:submit.prevent="onSubmit">
-
-                        <div v-if="error" class="form-group has-error">
-                            <span class="help-block text-center">
-                                <strong>{{error}}</strong>
-                            </span>
+                        <div v-if="errors">
+                            <ul v-for="(error, name, index) in errors">
+                                <strong>{{name}}</strong>
+                                <li v-for="detail in error" class="text-danger">{{detail}}</li>
+                            </ul>
                         </div>
 
                         <div class="form-group">
@@ -75,7 +75,7 @@
                 email: null,
                 password: null,
                 passwordConfirmation: null,
-                error: null
+                errors: null
             }
         },
         methods:{
@@ -89,12 +89,16 @@
                 })
                 .then((response) => {
                     console.log(response);
+                    this.$store.commit('setUser', response.data);
                     this.$cookie.set('authorization', JSON.stringify({token: response.data.token, url: response.data.href}) , { expires: '1M' });
                     this.$router.push({ path: '/' });
                 })
                 .catch((error) => {
-                        console.log(error.response.data);
-                    this.error = error.response.data.detail;
+                    console.log(error.response.data);
+                    this.errors = error.response.data;
+                    setTimeout(() => {
+                      this.errors = null;
+                    }, 2000)
                 });
             }
         }

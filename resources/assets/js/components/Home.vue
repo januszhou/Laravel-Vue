@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    // TODO: Put into model class later if needed
     class Question {
       constructor(id, name, multiple = 0) {
         this.id = id;
@@ -73,7 +74,6 @@
               });
           },
           submit(even){
-              console.log(this.selectAnswers);
               let answers = this.selectAnswers;
               let requestData = [];
               for(let questionId in answers){
@@ -92,8 +92,6 @@
                   }
               }
 
-              console.log(requestData);
-
               axios.post('/api/v1/user_answers', {data: requestData})
                 .then((response) => {
                     console.log(response);
@@ -101,7 +99,6 @@
                 })
                 .catch((error) => {
                     alert('Please try again.');
-                    console.log(error);
                 })
           }
       },

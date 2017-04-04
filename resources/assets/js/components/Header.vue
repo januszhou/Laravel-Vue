@@ -45,8 +45,9 @@
       },
       methods:{
           logout(event){
+              this.$store.commit('setUser', null);
               // logout will delete authentication cookie and redirect to login page
-              this.$cookie.delete('authentication');
+              this.$cookie.delete('authorization');
               this.$router.push({ path: '/login' });
           }
       },

@@ -59,7 +59,7 @@ let auth = VueCookie.get('authorization');
 try {
   auth = JSON.parse(auth);
 } catch(e) {
-  VueCookie.delete('authorization');
+  VueCookie.delete('authorization'); // delete error authorization
   auth = null;
 }
 
@@ -74,7 +74,6 @@ const app = new Vue({
         .then((response) => {
             console.log(response);
             store.commit('setUser', response.data);
-            router.push({ path: '/' });
         })
         .catch((error) => {
             router.push({ path: '/login' });

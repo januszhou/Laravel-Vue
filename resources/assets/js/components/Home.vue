@@ -15,7 +15,6 @@
           return {
               questions: null,
               start: false,
-              user: this.$store.getters.user,
               error: null
           }
       },
@@ -28,6 +27,12 @@
               .catch((error) => {
                   this.error = error.response.data.detail;
               });
+          }
+      },
+      computed: {
+          user(){
+              console.log(this.$store.state.user);
+              return this.$store.state.user;
           }
       }
     }

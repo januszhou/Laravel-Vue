@@ -12424,6 +12424,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 //
 //
+//
+//
+//
 
 var Question = function () {
     function Question(id, name) {
@@ -12459,7 +12462,8 @@ var Answer = function Answer(id, name) {
         return {
             questions: [],
             start: false,
-            error: null
+            error: null,
+            selectAnswers: {}
         };
     },
 
@@ -12470,6 +12474,7 @@ var Answer = function Answer(id, name) {
             axios.get('/api/v1/questions').then(function (response) {
                 var qArray = [];
                 response.data.forEach(function (item) {
+                    _this.selectAnswers[item.id] = [];
                     var question = new Question(item.id, item.title, item.is_multiple);
                     item.answers.forEach(function (answer) {
                         question.addAnswers(new Answer(answer.id, answer.title));
@@ -12479,8 +12484,37 @@ var Answer = function Answer(id, name) {
 
                 _this.questions = qArray;
             }).catch(function (error) {
+                _this.error = error;
+            });
+        },
+        submit: function submit(even) {
+            console.log(this.selectAnswers);
+            var answers = this.selectAnswers;
+            var requestData = [];
+            for (var questionId in answers) {
+                var answer = answers[questionId];
+                if (!answer || answer.length === 0) {
+                    alert('All questions must be answered');
+                    return;
+                }
+                if (Array.isArray(answer)) {
+                    // loop get answers
+                    for (var i in answer) {
+                        requestData.push({ question_id: questionId, answer_id: answer[i] });
+                    }
+                } else {
+                    requestData.push({ question_id: questionId, answer_id: answer });
+                }
+            }
+
+            console.log(requestData);
+
+            axios.post('/api/v1/user_answers', { data: requestData }).then(function (response) {
+                console.log(response);
+                alert('Thanks for answering questions.');
+            }).catch(function (error) {
+                alert('Please try again.');
                 console.log(error);
-                _this.error = error.response.data.detail;
             });
         }
     },
@@ -32636,24 +32670,54 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.getQuestions
     }
-  }, [_vm._v("Get Start")]) : _vm._e(), _vm._v(" "), _c('ol', _vm._l((_vm.questions), function(question) {
+  }, [_vm._v("Get Start")]) : _vm._e(), _vm._v(" "), (_vm.questions.length > 0) ? _c('div', [_c('ol', _vm._l((_vm.questions), function(question) {
     return _c('li', [_c('label', [_vm._v(_vm._s(question.name))]), _vm._v(" "), _c('select', {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.selectAnswers[question.id]),
+        expression: "selectAnswers[question.id]"
+      }],
       staticClass: "form-control",
       attrs: {
         "multiple": question.multiple ? true : false
+      },
+      on: {
+        "change": function($event) {
+          var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+            return o.selected
+          }).map(function(o) {
+            var val = "_value" in o ? o._value : o.value;
+            return val
+          });
+          var $$exp = _vm.selectAnswers,
+            $$idx = question.id;
+          if (!Array.isArray($$exp)) {
+            _vm.selectAnswers[question.id] = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+          } else {
+            $$exp.splice($$idx, 1, $event.target.multiple ? $$selectedVal : $$selectedVal[0])
+          }
+        }
       }
-    }, [(question.mutiple === 0) ? _c('option', {
+    }, [(question.mutiple == 0) ? _c('option', {
       attrs: {
         "val": "0"
       }
     }, [_vm._v("--SELECT--")]) : _vm._e(), _vm._v(" "), _vm._l((question.answers), function(answer) {
       return _c('option', {
-        attrs: {
-          "val": answer.id
+        domProps: {
+          "value": answer.id
         }
       }, [_vm._v(_vm._s(answer.name))])
     })], 2)])
-  }))])])
+  })), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-12 text-center"
+  }, [_c('button', {
+    staticClass: "btn btn-info btn-lg",
+    on: {
+      "click": _vm.submit
+    }
+  }, [_vm._v("Submit")])])]) : _vm._e()])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

@@ -90,6 +90,7 @@
                 .then((response) => {
                     console.log(response);
                     this.$store.commit('setUser', response.data);
+                    axios.defaults.headers.common['Authorization'] = response.data.token;
                     this.$cookie.set('authorization', JSON.stringify({token: response.data.token, url: response.data.href}) , { expires: '1M' });
                     this.$router.push({ path: '/' });
                 })

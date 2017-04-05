@@ -19,6 +19,7 @@
     "vuex": "^2.2.1"
   },
   "dependencies": {
+    "vue-chartjs": "^2.5.6",
     "vue-cookie": "^1.1.3"
   }
 }

@@ -21,5 +21,6 @@ Route::group(['middleware' => ['myapi'], 'prefix' => 'v1'], function () {
     Route::resource('users', 'UserController');
     Route::resource('questions', 'QuestionController', ['only' => ['index']]);
     Route::resource('user_answers', 'UserAnswerController');
+    Route::resource('charts', 'ChartController', ['only' => ['index']]);
 });
 

@@ -1,5 +1,20 @@
 ##Steps
 
+### Screenshots
+
+####Register
+
+![Register](https://github.com/januszhou/ableto-test/blob/master/public/images/Register.png "Register")
+
+####Login
+![Login](https://github.com/januszhou/ableto-test/blob/master/public/images/Login.png "Login")
+
+####Admin
+![Admin](https://github.com/januszhou/ableto-test/blob/master/public/images/Admin.png "Admin")
+
+####Question
+![Question](https://github.com/januszhou/ableto-test/blob/master/public/images/Question.png "Question")
+
 ### Create Database
 You can restore my local `dump.sql` file, or do manually migration
 ```
@@ -46,6 +61,9 @@ PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 ```
+
+### NPM
+Run `npm run dev` before you start it locally
 
 ### Roadmap
 - For security reason, it needs switch to JWT or Laravel Passport

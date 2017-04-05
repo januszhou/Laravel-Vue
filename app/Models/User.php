@@ -29,11 +29,16 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $appends = ['href', 'question_answer'];
+    protected $appends = ['href', 'question_answer', 'admin'];
 
     public function isAdmin()
     {
         return $this->is_admin == 1;
+    }
+
+    public function getAdminAttribute()
+    {
+        return $this->is_admin?1:0;
     }
 
     public function getNameAttribute()

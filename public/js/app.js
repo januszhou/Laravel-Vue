@@ -40769,6 +40769,9 @@ var Answer = function Answer(id, name) {
   computed: {
     user: function user() {
       return this.$store.state.user;
+    },
+    admin: function admin() {
+      return this.$store.state.user.admin == 1;
     }
   }
 });
@@ -79873,7 +79876,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-md-12"
   }, [(!_vm.user) ? _c('div', {
     staticClass: "center-block text-danger text-center"
-  }, [_c('strong', [_vm._v("You have to login to answer questions")])]) : _vm._e(), _vm._v(" "), (_vm.user && _vm.user.is_admin == 0) ? _c('button', {
+  }, [_c('strong', [_vm._v("You have to login to answer questions")])]) : _vm._e(), _vm._v(" "), (_vm.user && !_vm.admin) ? _c('button', {
     staticClass: "btn btn-success btn-lg center-block",
     on: {
       "click": _vm.getQuestions
@@ -79925,7 +79928,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.submit
     }
-  }, [_vm._v("Submit")])])]) : _vm._e(), _vm._v(" "), (_vm.user && _vm.user.is_admin == 1) ? _c('div', [_c('div', {
+  }, [_vm._v("Submit")])])]) : _vm._e(), _vm._v(" "), (_vm.user && _vm.admin) ? _c('div', [_c('div', {
     staticClass: "col-sm-12 text-center"
   }, [_c('button', {
     staticClass: "btn btn-info btn-lg",

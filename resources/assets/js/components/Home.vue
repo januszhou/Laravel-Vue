@@ -4,7 +4,7 @@
             <div class="center-block text-danger text-center" v-if="!user">
                 <strong>You have to login to answer questions</strong>
             </div>
-            <button v-if="user && user.admin == 0" class="btn btn-success btn-lg center-block" v-on:click="getQuestions">Get Start</button>
+            <button v-if="user && !admin" class="btn btn-success btn-lg center-block" v-on:click="getQuestions">Get Start</button>
 
             <div v-if="questions.length > 0">
                 <ol>
@@ -19,7 +19,7 @@
                 <div class="col-sm-12 text-center"><button class="btn btn-info btn-lg" v-on:click="submit">Submit</button></div>
             </div>
             <!-- Admin view -->
-            <div v-if="user && user.admin == 1">
+            <div v-if="user && admin">
               <div class="col-sm-12 text-center"><button class="btn btn-info btn-lg" v-on:click="getCharts">Get Charts</button></div>
               <div class="row" v-if="chartData">
                 <div class="col-md-4" v-for="questionData in chartData.questions">
@@ -263,6 +263,9 @@
       computed: {
           user(){
               return this.$store.state.user;
+          },
+          admin(){
+              return this.$store.state.user.admin == 1;
           }
       }
     }
